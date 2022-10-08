@@ -45,17 +45,22 @@ class Player1(RunPlayerInterface):
 
     def update_hand(self, card):
         self.hand.append(card)
+        self.update_score(card)
+        
+    def update_score(self, card):
         if len(card) == 3 and "10" in card:
-            self.score += 10
+            value = 10
         if len(card) == 2 and card[0].isdigit():
-            self.score += int(card[0])
+            value = int(card[0])
         if card[0] in ["K", "Q", "J"]:
-            self.score += 10
+            value = 10
         if card[0] == "A" and 21-self.score >= 10:
-            self.score += 11
+            value = 11
         if card[0] == "A" and 21-self.score < 10:
-            self.score += 1
+            value = 1
+        self.score += value
         print(f"Player 1 card dealt. {self.hand}, {card}, {self.score}")
+
 
 class Dealer(RunPlayerInterface):
     def __init__(self, name):
@@ -68,16 +73,20 @@ class Dealer(RunPlayerInterface):
     
     def update_hand(self, card):
         self.hand.append(card)
+        self.update_score(card)
+    
+    def update_score(self, card):
         if len(card) == 3 and "10" in card:
-            self.score += 10
+            value = 10
         if len(card) == 2 and card[0].isdigit():
-            self.score += int(card[0])
+            value = int(card[0])
         if card[0] in ["K", "Q", "J"]:
-            self.score += 10
+            value = 10
         if card[0] == "A" and 21-self.score >= 10:
-            self.score += 11
+            value = 11
         if card[0] == "A" and 21-self.score < 10:
-            self.score += 1
+            value = 1
+        self.score += value
         print(f"Dealer card dealt. {self.hand}, {card}, {self.score}")
 
 
@@ -88,6 +97,8 @@ def main():
     D.get_deck()
     
     player1.get_name()
+    winner = None
+
     n = 0
     run = True
     while run:
@@ -98,6 +109,9 @@ def main():
 
         card2 = D.deal_card()
         dealer.update_hand(card2)
+        
+        winner = player1.name if player1.score > dealer.score else dealer.name
+        print(f'Current winner:  {winner}') 
         n += 1
         ans = input("Do you wish to pull a new card?  ").lower()
         run = ans == "y" or ans == "yes"
