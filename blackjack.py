@@ -92,18 +92,5 @@ def main():
         player2.get_dealt_card(card2)
     
     
-main()
-
-'''d = Deck()
-print(d.get_deck())
-d.get_length()
-d.shuffle_deck()
-print(d.deal_card())
-d.get_length()
-print(d.deal_card())
-d.get_length()
-
-print('--------')
-d2 = Deck()
-print(d2.get_deck())
-d2.get_length()'''
+if __name__ == '__main__':
+    main()
