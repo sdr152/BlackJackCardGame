@@ -82,26 +82,33 @@ def main():
     
     player1_score = 0
     dealer_score = 0
-
-    winner = None
     n = 0
-    run = True
+    winner = None
     while player1_score < 21 and dealer_score < 21:
-        if n < 1:
-            print("First hand!")
-        card = D.deal_card()
-        player1.update_hand(card)
-        player1_score += add_score(card, player1_score)
+        while True:
+            x = input("Do you want to deal a new card? ")
+            if x == 'yes' or x == 'y':        
+                card = D.deal_card()
+                player1.update_hand(card)
+                player1_score += add_score(card, player1_score)
+                break
 
-        card2 = D.deal_card()
-        dealer.update_hand(card2)
-        dealer_score += add_score(card2, dealer_score)
-        
-        
-        
-        print("Player1 hand: ", player1.hand, "Score Player1: ", player1_score)
-        print("Dealer hand: ", dealer.hand, "Score Dealer: ", dealer_score)
+        while True:
+            y = input("Do you want to deal a new card? ")
+            if y == "yes" or y == "y":        
+                card2 = D.deal_card()
+                dealer.update_hand(card2)
+                dealer_score += add_score(card2, dealer_score)
+                break
+       
         n += 1
+
+        if n <= 1:
+            continue
+        print("Player1 hand: ", player1.hand, "Score Player1: ", player1_score)
+        print("Dealer hand: ", dealer.hand, "Score Dealer: ", dealer_score) 
+        if player1_score >= 21 or dealer_score >= 21:
+            break
         ans = input("Do you wish to pull a new card?  ").lower()
         run = ans == "y" or ans == "yes"
     
