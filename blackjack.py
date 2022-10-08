@@ -26,6 +26,7 @@ class Deck:
 class RunPlayerInterface:
     def __init__(self, name):
         self.name = name
+        self.score = 0
     
     def get_name(self):
         raise NotImplementedError("You must implement get_name() from Player1 or Player2")
@@ -36,29 +37,40 @@ class RunPlayerInterface:
 class Player1(RunPlayerInterface):
     def __init__(self, name):
         super().__init__(name)
+        self.score = 0
     
     def get_name(self):
         print(f"Player1 name: {self.name}")
 
-    def get_dealt_card(self):
-        print("Player 1 card dealt")
+    def get_dealt_card(self, card):
+        if card[0].isdigit():
+            self.score += int(card[0])
+        print(f"Player 1 card dealt. {card}, {self.score}")
 
 class Player2(RunPlayerInterface):
     def __init__(self, name):
         super().__init__(name)
+        self.score = 0
     
     def get_name(self):
         print(f"Player2 name: {self.name}")
     
-    def get_dealt_card(self):
-        print("Player 2 card dealt.")
+    def get_dealt_card(self, card):
+        if card[0].isdigit():
+            self.score += int(card[0])
+        print(f"Player 2 card dealt. {card}, {self.score}")
+
 
 def main():
     D = Deck()
     player1 = Player1("Samson")
     D.get_deck()
-    player1.get_dealt_card()
+    
     player1.get_name()
+    for i in range(3):
+        card = D.deal_card()
+        player1.get_dealt_card(card)
+    
 main()
 
 '''d = Deck()
