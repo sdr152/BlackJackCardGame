@@ -43,8 +43,16 @@ class Player1(RunPlayerInterface):
         print(f"Player1 name: {self.name}")
 
     def get_dealt_card(self, card):
-        if card[0].isdigit():
+        if len(card) == 3 and "10" in card:
+            self.score += 10
+        if len(card) == 2 and card[0].isdigit():
             self.score += int(card[0])
+        if card[0] in ["K", "Q", "J"]:
+            self.score += 10
+        if card[0] == "A" and 21-self.score >= 10:
+            self.score += 11
+        if card[0] == "A" and 21-self.score < 10:
+            self.score += 1
         print(f"Player 1 card dealt. {card}, {self.score}")
 
 class Player2(RunPlayerInterface):
@@ -56,8 +64,16 @@ class Player2(RunPlayerInterface):
         print(f"Player2 name: {self.name}")
     
     def get_dealt_card(self, card):
-        if card[0].isdigit():
+        if len(card) == 3 and "10" in card:
+            self.score += 10
+        if len(card) == 2 and card[0].isdigit():
             self.score += int(card[0])
+        if card[0] in ["K", "Q", "J"]:
+            self.score += 10
+        if card[0] == "A" and 21-self.score >= 10:
+            self.score += 11
+        if card[0] == "A" and 21-self.score < 10:
+            self.score += 1
         print(f"Player 2 card dealt. {card}, {self.score}")
 
 
@@ -67,17 +83,14 @@ def main():
     player2 = Player2("Beef")
     D.get_deck()
     
-    '''player1.get_name()
-    for i in range(3):
+    player1.get_name()
+    for i in range(7):
         card = D.deal_card()
         player1.get_dealt_card(card)
 
         card2 = D.deal_card()
         player2.get_dealt_card(card2)
-'''    
-    for player in [player1, player2]:
-        card = D.deal_card()
-        player.get_dealt_card(card)
+    
     
 main()
 
