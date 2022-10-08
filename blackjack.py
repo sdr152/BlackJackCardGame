@@ -67,13 +67,17 @@ def main():
     player2 = Player2("Beef")
     D.get_deck()
     
-    player1.get_name()
+    '''player1.get_name()
     for i in range(3):
         card = D.deal_card()
         player1.get_dealt_card(card)
 
         card2 = D.deal_card()
         player2.get_dealt_card(card2)
+'''    
+    for player in [player1, player2]:
+        card = D.deal_card()
+        player.get_dealt_card(card)
     
 main()
 
