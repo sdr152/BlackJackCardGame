@@ -45,22 +45,6 @@ class Player1(RunPlayerInterface):
 
     def update_hand(self, card):
         self.hand.append(card)
-        self.update_score(card)
-        
-    def update_score(self, card):
-        if len(card) == 3 and "10" in card:
-            value = 10
-        if len(card) == 2 and card[0].isdigit():
-            value = int(card[0])
-        if card[0] in ["K", "Q", "J"]:
-            value = 10
-        if card[0] == "A" and 21-self.score >= 10:
-            value = 11
-        if card[0] == "A" and 21-self.score < 10:
-            value = 1
-        self.score += value
-        print(f"Player 1 card dealt. {self.hand}, {card}, {self.score}")
-
 
 class Dealer(RunPlayerInterface):
     def __init__(self, name):
@@ -73,48 +57,57 @@ class Dealer(RunPlayerInterface):
     
     def update_hand(self, card):
         self.hand.append(card)
-        self.update_score(card)
+        
     
-    def update_score(self, card):
-        if len(card) == 3 and "10" in card:
-            value = 10
-        if len(card) == 2 and card[0].isdigit():
-            value = int(card[0])
-        if card[0] in ["K", "Q", "J"]:
-            value = 10
-        if card[0] == "A" and 21-self.score >= 10:
-            value = 11
-        if card[0] == "A" and 21-self.score < 10:
-            value = 1
-        self.score += value
-        print(f"Dealer card dealt. {self.hand}, {card}, {self.score}")
+def add_score(card, total_score):
+    if len(card) == 3 and "10" in card:
+        value = 10
+    if len(card) == 2 and card[0].isdigit():
+        value = int(card[0])
+    if card[0] in ["K", "Q", "J"]:
+        value = 10
+    if card[0] == "A" and 21-total_score >= 10:
+        value = 11
+    if card[0] == "A" and 21-total_score < 10:
+        value = 1
+    #self.score += value
+    return value
+    #print(f"Dealer card dealt. {self.hand}, {card}, {self.score}")
 
 
 def main():
     D = Deck()
     player1 = Player1("Samson")
-    dealer = Dealer("Beef")
-    D.get_deck()
+    dealer = Dealer("Beef Dealer")
     
-    player1.get_name()
-    winner = None
+    player1_score = 0
+    dealer_score = 0
 
+    winner = None
     n = 0
     run = True
-    while run:
+    while player1_score < 21 and dealer_score < 21:
         if n < 1:
             print("First hand!")
         card = D.deal_card()
         player1.update_hand(card)
+        player1_score += add_score(card, player1_score)
 
         card2 = D.deal_card()
         dealer.update_hand(card2)
+        dealer_score += add_score(card2, dealer_score)
         
-        winner = player1.name if player1.score > dealer.score else dealer.name
-        print(f'Current winner:  {winner}') 
+        
+        
+        print("Player1 hand: ", player1.hand, "Score Player1: ", player1_score)
+        print("Dealer hand: ", dealer.hand, "Score Dealer: ", dealer_score)
         n += 1
         ans = input("Do you wish to pull a new card?  ").lower()
         run = ans == "y" or ans == "yes"
+    
+    winner = player1.name if player1_score > dealer_score else dealer.name
+    print(f'Current winner:  {winner}') 
+
 
 if __name__ == "__main__":
     main()
