@@ -76,6 +76,7 @@ class Player2(RunPlayerInterface):
             self.score += 1
         print(f"Player 2 card dealt. {card}, {self.score}")
 
+
 def main():
     D = Deck()
     player1 = Player1("Samson")
@@ -88,12 +89,7 @@ def main():
         player1.get_dealt_card(card)
 
         card2 = D.deal_card()
-        player2.get_dealt_card(card2)
-<<<<<<< HEAD
-    
-    
-if __name__ == '__main__':
-main()=======
-            
-main()
->>>>>>> 03e40072578fe1afd0092f465dae998d7fbc4a9a
+        player2.get_dealt_card(card)
+
+if __name__ == "__main__":
+    main()
