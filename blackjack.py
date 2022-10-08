@@ -23,29 +23,45 @@ class Deck:
         dealt_card = self.deck.pop(0)
         return dealt_card
 
-class Player:
+class RunPlayerInterface:
     def __init__(self, name):
         self.name = name
     
+    def get_name(self):
+        raise NotImplementedError("You must implement get_name() from Player1 or Player2")
+
     def get_dealt_card(self):
         raise NotImplementedError("You must implement get_dealt_card() from Player1 or Player2")
 
-class Player1(Player):
+class Player1(RunPlayerInterface):
     def __init__(self, name):
         super().__init__(name)
     
+    def get_name(self):
+        print(f"Player1 name: {self.name}")
+
     def get_dealt_card(self):
         print("Player 1 card dealt")
 
-class Player2(Player):
+class Player2(RunPlayerInterface):
     def __init__(self, name):
         super().__init__(name)
+    
+    def get_name(self):
+        print(f"Player2 name: {self.name}")
     
     def get_dealt_card(self):
         print("Player 2 card dealt.")
 
+def main():
+    D = Deck()
+    player1 = Player1("Samson")
+    D.get_deck()
+    player1.get_dealt_card()
+    player1.get_name()
+main()
 
-d = Deck()
+'''d = Deck()
 print(d.get_deck())
 d.get_length()
 d.shuffle_deck()
@@ -57,4 +73,4 @@ d.get_length()
 print('--------')
 d2 = Deck()
 print(d2.get_deck())
-d2.get_length()
+d2.get_length()'''
