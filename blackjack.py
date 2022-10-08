@@ -29,20 +29,22 @@ class RunPlayerInterface:
         self.score = 0
     
     def get_name(self):
-        raise NotImplementedError("You must implement get_name() from Player1 or Player2")
+        raise NotImplementedError("You must implement get_name() from Player1 or Dealer")
 
-    def get_dealt_card(self):
-        raise NotImplementedError("You must implement get_dealt_card() from Player1 or Player2")
+    def update_hand(self):
+        raise NotImplementedError("You must implement update_hand() from Player1 or Dealer")
 
 class Player1(RunPlayerInterface):
     def __init__(self, name):
         super().__init__(name)
         self.score = 0
+        self.hand = []
     
     def get_name(self):
         print(f"Player1 name: {self.name}")
 
-    def get_dealt_card(self, card):
+    def update_hand(self, card):
+        self.hand.append(card)
         if len(card) == 3 and "10" in card:
             self.score += 10
         if len(card) == 2 and card[0].isdigit():
@@ -53,17 +55,19 @@ class Player1(RunPlayerInterface):
             self.score += 11
         if card[0] == "A" and 21-self.score < 10:
             self.score += 1
-        print(f"Player 1 card dealt. {card}, {self.score}")
+        print(f"Player 1 card dealt. {self.hand}, {card}, {self.score}")
 
-class Player2(RunPlayerInterface):
+class Dealer(RunPlayerInterface):
     def __init__(self, name):
         super().__init__(name)
         self.score = 0
+        self.hand = []
     
     def get_name(self):
-        print(f"Player2 name: {self.name}")
+        print(f"Dealer name: {self.name}")
     
-    def get_dealt_card(self, card):
+    def update_hand(self, card):
+        self.hand.append(card)
         if len(card) == 3 and "10" in card:
             self.score += 10
         if len(card) == 2 and card[0].isdigit():
@@ -74,22 +78,29 @@ class Player2(RunPlayerInterface):
             self.score += 11
         if card[0] == "A" and 21-self.score < 10:
             self.score += 1
-        print(f"Player 2 card dealt. {card}, {self.score}")
+        print(f"Dealer card dealt. {self.hand}, {card}, {self.score}")
 
 
 def main():
     D = Deck()
     player1 = Player1("Samson")
-    player2 = Player2("Beef")
+    dealer = Dealer("Beef")
     D.get_deck()
     
     player1.get_name()
-    for i in range(7):
+    n = 0
+    run = True
+    while run:
+        if n < 1:
+            print("First hand!")
         card = D.deal_card()
-        player1.get_dealt_card(card)
+        player1.update_hand(card)
 
         card2 = D.deal_card()
-        player2.get_dealt_card(card)
+        dealer.update_hand(card2)
+        n += 1
+        ans = input("Do you wish to pull a new card?  ").lower()
+        run = ans == "y" or ans == "yes"
 
 if __name__ == "__main__":
     main()
