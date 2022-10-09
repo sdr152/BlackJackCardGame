@@ -114,19 +114,16 @@ def main():
         
         q = input("Do you want to deal a new card? ")
         if q == 'no' or q == 'n':
-            run = False
+            print("You stopped!")
+            break
         card = deck.deal_card()
         player1.update_hand(card)
         player1_score += add_score(card, player1_score)
-        
-        #while True:
-        #    x = input("Do you want to deal a new card? ")
-        #    if x == 'yes' or x == 'y':        
-        #        card = deck.deal_card()
-        #        player1.update_hand(card)
-        #        player1_score += add_score(card, player1_score)
-        #    break
- 
+
+        if player1_score > 21:
+            print("You lost")
+            break
+
     winner = player1.name if player1_score > dealer_score else dealer.name
     print(f'Current winner:  {winner}') 
 
