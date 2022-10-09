@@ -84,6 +84,28 @@ def add_score(card, total_score):
     if card[0] == "A" and 21-total_score < 10:
         value = 1
     return value
+def get_winner(winner, player1, dealer, player1_score, dealer_score, vegas_savings, bet, vault):
+    if winner == None:
+        if player1_score > dealer_score:
+            winner = player1.name
+            vault -= 2*bet
+            vegas_savings += 2*bet
+        elif player1_score < dealer_score:
+            winner = dealer.name
+            vegas_savings -= bet
+            vault += bet
+        else:
+            winner = "NO WINNER"
+    else:
+        if winner == player1.name:
+            vault -= 2*bet
+            vegas_savings += 2*bet
+        elif winner == dealer.name:
+            vegas_savings -= bet
+            vault += bet
+        else:
+            winner = "NO WINNER"
+    return winner, vegas_savings, vault
 
 def main():
     print("*** WELCOME TO COCO BONGO CASINO! ***\n")
@@ -146,24 +168,7 @@ def main():
             print("Player1 hand: ", player1.hand, "Score Player1: ", player1_score)
             print("Dealer hand: ", dealer.hand, "Score Dealer: ", dealer_score, "\n") 
 
-        if winner == None:
-            if player1_score > dealer_score:
-                winner = player1.name
-                vegas_savings += 2*bet
-            elif player1_score < dealer_score:
-                winner = dealer.name
-                vegas_savings -= bet
-                vault += bet
-            else:
-                winner = "NO WINNER"
-        else:
-            if winner == player1.name:
-                vegas_savings += 2*bet
-            elif winner == dealer.name:
-                vegas_savings -= bet
-                vault += bet
-            else:
-                winner = "NO WINNER"
+        winner, vegas_savings, vault = get_winner(winner, player1, dealer, player1_score, dealer_score, vegas_savings, bet, vault)
         print("WINNER:  ", winner)
         print("Savings: ", vegas_savings)
         print("Casino Vault:  ", vault) 
