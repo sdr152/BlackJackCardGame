@@ -72,7 +72,6 @@ class Dealer(RunPlayerInterface):
     def update_hand(self, card):
         self.hand.append(card)
         
-    
 def add_score(card, total_score):
     if len(card) == 3 and "10" in card:
         value = 10
@@ -84,10 +83,7 @@ def add_score(card, total_score):
         value = 11
     if card[0] == "A" and 21-total_score < 10:
         value = 1
-    #self.score += value
     return value
-    #print(f"Dealer card dealt. {self.hand}, {card}, {self.score}")
-
 
 def main():
     deck = Deck()
@@ -106,6 +102,7 @@ def main():
         player1_score += v
     dealer_score = add_score(first_hand2[0], 0)
     winner = None
+    
     print("------ PLAYER'S TURN! ------\n")
     while True:
         
@@ -123,6 +120,7 @@ def main():
         if player1_score > 21:
             winner = dealer.name
             break
+    
     print("------ DEALER'S TURN ------\n")
     while winner==None:
         dealer_score += add_score(first_hand2[1], dealer_score)
