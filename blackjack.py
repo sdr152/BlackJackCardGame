@@ -106,25 +106,43 @@ def main():
         player1_score += v
     dealer_score = add_score(first_hand2[0], 0)
     winner = None
-    run = True
-    while run:
-
-        print("Player1 hand: ", player1.hand, "Score Player1: ", player1_score)
-        print("Dealer hand: ", dealer.hand, "Score Dealer: ", dealer_score) 
+    print("------ PLAYER'S TURN! ------\n")
+    while True:
         
-        q = input("Do you want to deal a new card? ")
+        print("Player1 hand: ", player1.hand, "Score Player1: ", player1_score)
+        print("Dealer hand: ", dealer.hand, "Score Dealer: ", dealer_score, "\n") 
+        
+        q = input("Do you want to hit a new card? ")
         if q == 'no' or q == 'n':
-            print("You stopped!")
+            print("You decided to stay!\n")
             break
         card = deck.deal_card()
         player1.update_hand(card)
         player1_score += add_score(card, player1_score)
 
         if player1_score > 21:
-            print("You lost")
+            winner = dealer.name
             break
+    print("------ DEALER'S TURN ------\n")
+    while winner==None:
+        dealer_score += add_score(first_hand2[1], dealer_score)
+        card = deck.deal_card()
+        dealer.update_hand(card)
+        dealer_score += add_score(card, dealer_score)
+        print("Player1 hand: ", player1.hand, "Score Player1: ", player1_score)
+        print("Dealer hand: ", dealer.hand, "Score Dealer: ", dealer_score, "\n") 
 
-    winner = player1.name if player1_score > dealer_score else dealer.name
+        if dealer_score > 21:
+            #print("Dealer Loses")
+            winner = player1.name
+            break
+        
+        if dealer_score >= 17:
+            print("Dealer decides to stay\n")
+            break
+        
+    if winner == None:
+        winner = player1.name if player1_score > dealer_score else dealer.name
     print(f'Current winner:  {winner}') 
 
 
