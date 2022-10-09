@@ -86,63 +86,90 @@ def add_score(card, total_score):
     return value
 
 def main():
-    deck = Deck()
-    player1 = Player1("Samson")
-    dealer = Dealer("Beef Dealer")
+    print("*** WELCOME TO COCO BONGO CASINO! ***\n")
+    vegas_savings = 5000
+    vault = 0
 
-    first_hand1 = deck.give_first_two_cards()
-    first_hand2 = deck.give_first_two_cards()
-    
-    player1.get_first_hand(first_hand1)
-    dealer.get_first_hand(first_hand2)
-    
-    player1_score = 0
-    for cd in player1.hand:
-        v = add_score(cd, player1_score)
-        player1_score += v
-    dealer_score = add_score(first_hand2[0], 0)
-    winner = None
-    
-    print("------ PLAYER'S TURN! ------\n")
-    while True:
-        
-        print("Player1 hand: ", player1.hand, "Score Player1: ", player1_score)
-        print("Dealer hand: ", dealer.hand, "Score Dealer: ", dealer_score, "\n") 
-        
-        q = input("Do you want to hit a new card? ")
-        if q == 'no' or q == 'n':
-            print("You decided to stay!\n")
-            break
-        card = deck.deal_card()
-        player1.update_hand(card)
-        player1_score += add_score(card, player1_score)
+    run = True
+    while run:
+        bet = float(input("How much do you want to bet?  "))
+        deck = Deck()
+        deck.shuffle_deck()
+        player1 = Player1("Samuel")
+        dealer = Dealer("Dealer")
 
-        if player1_score > 21:
-            winner = dealer.name
-            break
-    
-    print("------ DEALER'S TURN ------\n")
-    while winner==None:
+        first_hand1 = deck.give_first_two_cards()
+        first_hand2 = deck.give_first_two_cards()
+        
+        player1.get_first_hand(first_hand1)
+        dealer.get_first_hand(first_hand2)
+        
+        player1_score = 0
+        for cd in player1.hand:
+            v = add_score(cd, player1_score)
+            player1_score += v
+        dealer_score = add_score(first_hand2[0], 0)
+        winner = None
+        
+        print("------ PLAYER'S TURN! ------\n")
+        while True:
+            print("Player1 hand: ", player1.hand, "Score Player1: ", player1_score)
+            print("Dealer hand: ", dealer.hand, "Score Dealer: ", dealer_score, "\n") 
+            
+            if player1_score > 21:
+                winner = dealer.name
+                break
+
+            q = input("Do you want to hit a new card? ").lower()
+            if q == 'no' or q == 'n':
+                print("You decided to stay!\n")
+                break
+            
+            card = deck.deal_card()
+            player1.update_hand(card)
+            player1_score += add_score(card, player1_score)
+
+        print("------ DEALER'S TURN ------\n")
         dealer_score += add_score(first_hand2[1], dealer_score)
-        card = deck.deal_card()
-        dealer.update_hand(card)
-        dealer_score += add_score(card, dealer_score)
-        print("Player1 hand: ", player1.hand, "Score Player1: ", player1_score)
-        print("Dealer hand: ", dealer.hand, "Score Dealer: ", dealer_score, "\n") 
+        while winner==None:
+            if dealer_score > 21:
+                winner = player1.name
+                break
+            
+            if dealer_score >= 17:
+                print("Dealer decides to stay\n")
+                break
+            
+            card = deck.deal_card()
+            dealer.update_hand(card)
+            dealer_score += add_score(card, dealer_score)
+            print("Player1 hand: ", player1.hand, "Score Player1: ", player1_score)
+            print("Dealer hand: ", dealer.hand, "Score Dealer: ", dealer_score, "\n") 
 
-        if dealer_score > 21:
-            #print("Dealer Loses")
-            winner = player1.name
-            break
-        
-        if dealer_score >= 17:
-            print("Dealer decides to stay\n")
-            break
-        
-    if winner == None:
-        winner = player1.name if player1_score > dealer_score else dealer.name
-    print(f'Current winner:  {winner}') 
+        if winner == None:
+            if player1_score > dealer_score:
+                winner = player1.name
+                vegas_savings += 2*bet
+            elif player1_score < dealer_score:
+                winner = dealer.name
+                vegas_savings -= bet
+                vault += bet
+            else:
+                winner = "NO WINNER"
+        else:
+            if winner == player1.name:
+                vegas_savings += 2*bet
+            elif winner == dealer.name:
+                vegas_savings -= bet
+                vault += bet
+            else:
+                winner = "NO WINNER"
+        print("WINNER:  ", winner)
+        print("Savings: ", vegas_savings)
+        print("Casino Vault:  ", vault) 
 
+        play = input("Do you want to bet again?  ").lower()
+        run = play=='y' or play=='yes'
 
 if __name__ == "__main__":
     main()
