@@ -141,44 +141,58 @@ def main():
         winner = None
         
         print("------ PLAYER'S TURN! ------\n")
+        print("Dealer hand: ", dealer.hand[0], "Score Dealer: ", dealer_score, "\n")
         while True:
             print("Player1 hand: ", player1.hand, "Score Player1: ", player1_score)
-            print("Dealer hand: ", dealer.hand[0], "Score Dealer: ", dealer_score, "\n") 
             
+            # Check whether the player's score is over 21 or not.
             if player1_score > 21:
                 winner = dealer.name
                 break
-
+            
+            # Ask the player if he wants to hit a new card.
             q = input("Do you want to hit a new card? ").lower()
             if q == 'no' or q == 'n':
                 print("You decided to stay!\n")
                 break
-            
             card = deck.deal_card()
             player1.update_hand(card)
+            
+            # Get value of the card and update score.
             player1_score += get_value(card, player1_score)
 
         print("------ DEALER'S TURN ------\n")
         dealer_score += get_value(first_hand2[1], dealer_score)
+        
+        
         while winner==None:
+            # If there is still no winner, check wether the dealer's score is over 21 or not.
             if dealer_score > 21:
                 winner = player1.name
                 break
             
+            # Check whether to hit or stay.
             if dealer_score >= 17:
                 print("Dealer decides to stay\n")
                 break
             
+            # Dealer hit new card and updates hand.
             card = deck.deal_card()
             dealer.update_hand(card)
+
+            # Dealer get value from the card and updates score.
             dealer_score += get_value(card, dealer_score)
-            print("Player1 hand: ", player1.hand, "Score Player1: ", player1_score)
+        
             print("Dealer hand: ", dealer.hand, "Score Dealer: ", dealer_score, "\n") 
 
         winner, vegas_savings, vault = get_winner(winner, player1, dealer, player1_score, dealer_score, vegas_savings, bet, vault)
-        print("WINNER:  ", winner)
-        print("Savings: ", vegas_savings)
-        print("Casino Vault:  ", vault) 
+        print("Player's hand:   ", player1.hand)
+        print("Player's score:  ", player1_score)
+        print("Dealer's hand:   ", dealer.hand)
+        print("Dealers' score:  ", dealer_score)
+        print("WINNER:          ", winner)
+        print("Savings:         ", vegas_savings)
+        print("Casino Vault:    ", vault) 
 
         play = input("Do you want to bet again?  ").lower()
         run = play=='y' or play=='yes'
