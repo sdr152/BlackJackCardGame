@@ -1,16 +1,16 @@
 from random import shuffle
 class Deck:
+    cards = [str(i) for i in range(2, 10)] + ["A", "T", "Q", "J", "K"]
+    suits = ["D", "H", "C", "S"]
+
     def __init__(self):
-        self.cards = [str(i) for i in range(2, 10)] + ["A", "K", "Q", "J", "T"]
-        self.suits = ["D", "H", "C", "S"]
-        self.deck = [card+suit for suit in self.suits for card in self.cards]
+        self.deck = [card+suit for suit in Deck.suits for card in Deck.cards]
 
     def get_deck(self):
         return self.deck
 
     def shuffle_deck(self):
         shuffle(self.deck)
-        print(self.deck)
     
     def make_copy(self):
         deck_copy = self.deck.copy()
