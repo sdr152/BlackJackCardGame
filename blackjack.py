@@ -72,7 +72,7 @@ class Dealer(RunPlayerInterface):
     def update_hand(self, card):
         self.hand.append(card)
         
-def add_score(card, total_score):
+def get_value(card, total_score):
     if len(card) == 2 and card[0].isdigit():
         value = int(card[0])
     if card[0] in ["K", "Q", "J", "T"]:
@@ -110,32 +110,40 @@ def main():
     print("*** WELCOME TO COCO BONGO CASINO! ***\n")
     vegas_savings = 5000
     vault = 0
+    print("Available cash: ", vegas_savings)
+    print("Casino Vault:   ", vault)
 
     run = True
     while run:
-        bet = float(input("How much do you want to bet?  "))
+        #Initialize deck.
         deck = Deck()
         deck.shuffle_deck()
+
+        #Initialize player and dealer.
         player1 = Player1("Samuel")
         dealer = Dealer("Dealer")
-
+        
+        # How much does the player want to bet?
+        bet = float(input("How much do you want to bet?  "))
+        
+        # Get first hands of two cards to player and dealer.
         first_hand1 = deck.give_first_two_cards()
         first_hand2 = deck.give_first_two_cards()
-        
         player1.get_first_hand(first_hand1)
         dealer.get_first_hand(first_hand2)
         
+        # Update score for the player and partial score for the dealer.
         player1_score = 0
         for cd in player1.hand:
-            v = add_score(cd, player1_score)
+            v = get_value(cd, player1_score)
             player1_score += v
-        dealer_score = add_score(first_hand2[0], 0)
+        dealer_score = get_value(first_hand2[0], 0)
         winner = None
         
         print("------ PLAYER'S TURN! ------\n")
         while True:
             print("Player1 hand: ", player1.hand, "Score Player1: ", player1_score)
-            print("Dealer hand: ", dealer.hand, "Score Dealer: ", dealer_score, "\n") 
+            print("Dealer hand: ", dealer.hand[0], "Score Dealer: ", dealer_score, "\n") 
             
             if player1_score > 21:
                 winner = dealer.name
@@ -148,10 +156,10 @@ def main():
             
             card = deck.deal_card()
             player1.update_hand(card)
-            player1_score += add_score(card, player1_score)
+            player1_score += get_value(card, player1_score)
 
         print("------ DEALER'S TURN ------\n")
-        dealer_score += add_score(first_hand2[1], dealer_score)
+        dealer_score += get_value(first_hand2[1], dealer_score)
         while winner==None:
             if dealer_score > 21:
                 winner = player1.name
@@ -163,7 +171,7 @@ def main():
             
             card = deck.deal_card()
             dealer.update_hand(card)
-            dealer_score += add_score(card, dealer_score)
+            dealer_score += get_value(card, dealer_score)
             print("Player1 hand: ", player1.hand, "Score Player1: ", player1_score)
             print("Dealer hand: ", dealer.hand, "Score Dealer: ", dealer_score, "\n") 
 
