@@ -1,8 +1,8 @@
 from random import shuffle
 class Deck:
     def __init__(self):
-        self.cards = [str(i) for i in range(2, 11)] + ["A", "K", "Q", "J"]
-        self.suits = ["H", "S", "T", "D"]
+        self.cards = [str(i) for i in range(2, 10)] + ["A", "K", "Q", "J", "T"]
+        self.suits = ["D", "H", "C", "S"]
         self.deck = [card+suit for suit in self.suits for card in self.cards]
 
     def get_deck(self):
@@ -73,17 +73,16 @@ class Dealer(RunPlayerInterface):
         self.hand.append(card)
         
 def add_score(card, total_score):
-    if len(card) == 3 and "10" in card:
-        value = 10
     if len(card) == 2 and card[0].isdigit():
         value = int(card[0])
-    if card[0] in ["K", "Q", "J"]:
+    if card[0] in ["K", "Q", "J", "T"]:
         value = 10
     if card[0] == "A" and 21-total_score >= 10:
         value = 11
     if card[0] == "A" and 21-total_score < 10:
         value = 1
     return value
+
 def get_winner(winner, player1, dealer, player1_score, dealer_score, vegas_savings, bet, vault):
     if winner == None:
         if player1_score > dealer_score:
